@@ -1,0 +1,84 @@
+# Calcalist SEO Dashboard Project Context
+
+## Project Overview
+This is an SEO dashboard project for Calcalist.co.il, a major Israeli financial news website. The project includes interactive HTML dashboards for tracking and reporting SEO performance metrics.
+
+## Key Context
+
+### Brand Identity
+- **Brand**: Calcalist (כלכליסט)
+- **Primary Colors**: 
+  - Red: #E31E24
+  - Black: #1A1A1A
+  - White: #FFFFFF
+- **Language**: Hebrew (RTL layout)
+- **Target Market**: Israel (google.co.il)
+
+### Project Structure
+- `/dashboards` - HTML dashboard files
+- `/docs` - Documentation and instructions
+- `/prompts` - Saved AI prompts
+
+### Dashboard Requirements
+- Single HTML file with embedded CSS/JS
+- Uses Chart.js for visualizations
+- Hebrew RTL layout
+- Mobile responsive
+- Dark/Light mode toggle
+- Positive, client-friendly presentation
+- Monthly updates with trend analysis
+
+### Key Metrics Tracked
+- Keyword rankings (top 50+ keywords)
+- Average position
+- Visibility score
+- Position distribution (#1-3, #4-10, #11-20, 20+)
+- Category performance (finance, tech, real estate, crypto)
+- Month-over-month changes
+- Competitive positioning vs Globes/TheMarker
+
+### Data Sources
+- Apify Google Search Scraper (google.co.il)
+- Website content analysis
+- Competitor comparison tools
+
+### Update Frequency
+- Monthly updates
+- Focus on highlighting improvements
+- Positive framing of all metrics
+- Compare with previous month
+
+### Technical Stack
+- HTML5
+- CSS3 (with animations)
+- JavaScript (vanilla)
+- Chart.js library
+- No build process required (standalone HTML)
+
+### Important Files
+- `dashboards/calcalist-seo-dashboard.html` - Main dashboard
+- `docs/SEO-DASHBOARD-REMINDER.md` - Update reminders
+- `docs/CURSOR-SEO-DASHBOARD-INSTRUCTIONS.md` - AI prompt instructions
+
+### When Updating Dashboards
+1. Always maintain positive tone
+2. Highlight improvements with green arrows ↑
+3. Use Hebrew terminology appropriately
+4. Update "Last updated" date
+5. Compare with previous month's data
+6. Create iframe version if needed
+
+### Hebrew Keywords Focus
+- Finance: "שוק ההון", "בורסה", "חדשות כלכלה"
+- Tech: "הייטק ישראלי", "חדשות הייטק"
+- Real Estate: "נדל״ן"
+- Crypto: "קריפטו", "ביטקוין"
+- Brand: "כלכליסט"
+
+### Design Principles
+- Modern, clean financial news aesthetic
+- Smooth animations and transitions
+- Professional presentation for client reporting
+- Emphasis on wins and improvements
+- Visual hierarchy with Calcalist branding
+

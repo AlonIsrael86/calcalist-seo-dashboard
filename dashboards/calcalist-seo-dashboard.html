@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דשבורד SEO - כלכליסט</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 100%);
+            color: #FFFFFF;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #E31E24 0%, #c41a1f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(227, 30, 36, 0.3);
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(227, 30, 36, 0.3);
+            border-color: #E31E24;
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: bold;
+            color: #E31E24;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Section */
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #E31E24;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(227, 30, 36, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title::before {
+            content: '📊';
+            font-size: 32px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: rgba(227, 30, 36, 0.2);
+            padding: 15px;
+            text-align: right;
+            border-bottom: 2px solid #E31E24;
+            font-weight: bold;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(227, 30, 36, 0.1);
+        }
+
+        .position-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .position-1 {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1A1A1A;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .position-2-3 {
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+            color: #1A1A1A;
+        }
+
+        .position-4-10 {
+            background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+            color: #FFFFFF;
+        }
+
+        .position-11-20 {
+            background: rgba(227, 30, 36, 0.3);
+            color: #FFFFFF;
+        }
+
+        .trend-up {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .trend-down {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .trend-stable {
+            color: #FFC107;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 15px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #E31E24 0%, #ff4757 100%);
+            border-radius: 15px;
+            transition: width 1.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Landing Pages */
+        .landing-page-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .landing-page-card:hover {
+            transform: translateX(-5px);
+            border-color: #E31E24;
+            box-shadow: 0 5px 15px rgba(227, 30, 36, 0.2);
+        }
+
+        .landing-page-url {
+            color: #E31E24;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .landing-page-url:hover {
+            text-decoration: underline;
+        }
+
+        .traffic-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .traffic-high {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .traffic-medium {
+            background: #FFC107;
+            color: #1A1A1A;
+        }
+
+        .traffic-low {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Competitive Advantage */
+        .advantage-item {
+            background: rgba(227, 30, 36, 0.1);
+            border-right: 4px solid #E31E24;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .advantage-item:nth-child(1) { animation-delay: 0.1s; }
+        .advantage-item:nth-child(2) { animation-delay: 0.2s; }
+        .advantage-item:nth-child(3) { animation-delay: 0.3s; }
+        .advantage-item:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(227, 30, 36, 0.8);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: #E31E24;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #E31E24;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .section {
+                background: white;
+                border: 1px solid #ccc;
+                page-break-inside: avoid;
+            }
+
+            .theme-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 מצב כהה/בהיר</button>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">כלכליסט</div>
+                <h1>דשבורד SEO - דוח ביצועים</h1>
+                <p>ניתוח מקיף של דירוגי החיפוש והביצועים הדיגיטליים | עדכון אחרון: נובמבר 2025</p>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <h2 class="section-title">תקציר מנהלים</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" data-target="47">0</div>
+                    <div class="stat-label">מילות מפתח במעקב</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" data-target="8.2">0</div>
+                    <div class="stat-label">דירוג ממוצע</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value" data-target="73">0</div>
+                    <div class="stat-label">ציון נראות</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚀</div>
+                    <div class="stat-value" data-target="18">0</div>
+                    <div class="stat-label">שיפור חודשי (%)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Keyword Rankings Overview -->
+        <div class="section">
+            <h2 class="section-title">סקירת דירוגי מילות מפתח</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔍</div>
+                    <div class="stat-value" data-target="47">0</div>
+                    <div class="stat-label">סה"כ מילות מפתח</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" data-target="12">0</div>
+                    <div class="stat-label">דירוגים #1-3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📉</div>
+                    <div class="stat-value" data-target="18">0</div>
+                    <div class="stat-label">דירוגים #4-10</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💪</div>
+                    <div class="stat-value" data-target="73">0</div>
+                    <div class="stat-label">ציון נראות</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performing Keywords -->
+        <div class="section">
+            <h2 class="section-title">מילות מפתח מובילות</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>מילת מפתח</th>
+                        <th>דירוג נוכחי</th>
+                        <th>נפח חיפוש</th>
+                        <th>מגמה</th>
+                        <th>שינוי חודשי</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>שוק ההון</td>
+                        <td><span class="position-badge position-1">#1</span></td>
+                        <td>12,100</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+2 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>הייטק ישראלי</td>
+                        <td><span class="position-badge position-2-3">#3</span></td>
+                        <td>8,900</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+1 מקום</td>
+                    </tr>
+                    <tr>
+                        <td>חדשות כלכלה</td>
+                        <td><span class="position-badge position-2-3">#2</span></td>
+                        <td>15,400</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+3 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>נדל״ן</td>
+                        <td><span class="position-badge position-4-10">#6</span></td>
+                        <td>9,200</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+4 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>בורסה</td>
+                        <td><span class="position-badge position-2-3">#3</span></td>
+                        <td>11,800</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+2 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>קריפטו</td>
+                        <td><span class="position-badge position-4-10">#7</span></td>
+                        <td>6,500</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+5 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>ביטקוין</td>
+                        <td><span class="position-badge position-4-10">#8</span></td>
+                        <td>7,200</td>
+                        <td><span class="trend-stable">→ יציב</span></td>
+                        <td>0 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>שער הדולר</td>
+                        <td><span class="position-badge position-11-20">#12</span></td>
+                        <td>18,500</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+6 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>חדשות הייטק</td>
+                        <td><span class="position-badge position-4-10">#5</span></td>
+                        <td>5,800</td>
+                        <td><span class="trend-up">↑ עלייה</span></td>
+                        <td>+3 מקומות</td>
+                    </tr>
+                    <tr>
+                        <td>כלכליסט</td>
+                        <td><span class="position-badge position-1">#1</span></td>
+                        <td>22,000</td>
+                        <td><span class="trend-stable">→ יציב</span></td>
+                        <td>0 מקומות</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Position Distribution -->
+        <div class="section">
+            <h2 class="section-title">התפלגות דירוגים</h2>
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <canvas id="positionChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="section">
+            <h2 class="section-title">פירוט לפי קטגוריות</h2>
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>כלכלה ופיננסים</span>
+                    <span>דירוג ממוצע: 4.2</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>הייטק וטכנולוגיה</span>
+                    <span>דירוג ממוצע: 5.8</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 72%"></div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>נדל״ן</span>
+                    <span>דירוג ממוצע: 6.5</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 68%"></div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>קריפטו ובלוקצ'יין</span>
+                    <span>דירוג ממוצע: 7.2</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Month-over-Month Comparison -->
+        <div class="section">
+            <h2 class="section-title">השוואה חודשית</h2>
+            <div class="chart-container">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Competitive Advantage -->
+        <div class="section">
+            <h2 class="section-title">יתרון תחרותי</h2>
+            <div class="advantage-item">
+                <h3 style="color: #E31E24; margin-bottom: 10px;">מוביל בקטגוריית "שוק ההון"</h3>
+                <p>כלכליסט מדורג #1 במילת המפתח "שוק ההון", לפני גלובס (#4) ודה מרקר (#5). זהו יתרון תחרותי משמעותי בקטגוריה מרכזית.</p>
+            </div>
+            <div class="advantage-item">
+                <h3 style="color: #E31E24; margin-bottom: 10px;">צמיחה משמעותית בקטגוריית הייטק</h3>
+                <p>עלייה של 3 מקומות במילת המפתח "חדשות הייטק", עם דירוג #5. כלכליסט מוביל בחדשות טכנולוגיה ישראליות.</p>
+            </div>
+            <div class="advantage-item">
+                <h3 style="color: #E31E24; margin-bottom: 10px;">ביצועים מצוינים במילות מפתח מותג</h3>
+                <p>דירוג #1 יציב במילת המפתח "כלכליסט" עם נפח חיפוש של 22,000 חיפושים חודשיים. זה מצביע על מודעות מותג חזקה.</p>
+            </div>
+            <div class="advantage-item">
+                <h3 style="color: #E31E24; margin-bottom: 10px;">עלייה בדירוג בקטגוריית נדל״ן</h3>
+                <p>שיפור של 4 מקומות במילת המפתח "נדל״ן", עם דירוג #6. כלכליסט מתחזק בקטגוריה חשובה זו.</p>
+            </div>
+        </div>
+
+        <!-- Top Landing Pages -->
+        <div class="section">
+            <h2 class="section-title">דפי נחיתה מובילים</h2>
+            <div class="landing-page-card">
+                <a href="https://www.calcalist.co.il/market" class="landing-page-url" target="_blank">
+                    https://www.calcalist.co.il/market
+                </a>
+                <div>
+                    <span class="traffic-indicator traffic-high">גבוה</span>
+                    <span>שוק ההון - דף מרכזי עם ביצועים מצוינים</span>
+                </div>
+                <div style="margin-top: 10px; opacity: 0.8;">
+                    דירוגים: #1 (שוק ההון), #3 (בורסה), #2 (חדשות כלכלה)
+                </div>
+            </div>
+            <div class="landing-page-card">
+                <a href="https://www.calcalist.co.il/calcalistech" class="landing-page-url" target="_blank">
+                    https://www.calcalist.co.il/calcalistech
+                </a>
+                <div>
+                    <span class="traffic-indicator traffic-high">גבוה</span>
+                    <span>כלכליסט-טק - ערוץ טכנולוגיה מוביל</span>
+                </div>
+                <div style="margin-top: 10px; opacity: 0.8;">
+                    דירוגים: #3 (הייטק ישראלי), #5 (חדשות הייטק)
+                </div>
+            </div>
+            <div class="landing-page-card">
+                <a href="https://www.calcalist.co.il/real-estate" class="landing-page-url" target="_blank">
+                    https://www.calcalist.co.il/real-estate
+                </a>
+                <div>
+                    <span class="traffic-indicator traffic-medium">בינוני</span>
+                    <span>נדלניסט - ערוץ נדל״ן מתפתח</span>
+                </div>
+                <div style="margin-top: 10px; opacity: 0.8;">
+                    דירוגים: #6 (נדל״ן), #8 (נדלן ישראל)
+                </div>
+            </div>
+            <div class="landing-page-card">
+                <a href="https://www.calcalist.co.il/home" class="landing-page-url" target="_blank">
+                    https://www.calcalist.co.il/home
+                </a>
+                <div>
+                    <span class="traffic-indicator traffic-high">גבוה</span>
+                    <span>דף הבית - נקודת כניסה מרכזית</span>
+                </div>
+                <div style="margin-top: 10px; opacity: 0.8;">
+                    דירוגים: #1 (כלכליסט), #2 (חדשות כלכלה)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Counter Animation
+        function animateCounter(element) {
+            const target = parseFloat(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = typeof target === 'number' && target % 1 !== 0 ? target.toFixed(1) : target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = typeof target === 'number' && target % 1 !== 0 ? current.toFixed(1) : Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Initialize counters
+        document.addEventListener('DOMContentLoaded', () => {
+            const counters = document.querySelectorAll('.stat-value');
+            counters.forEach(counter => {
+                animateCounter(counter);
+            });
+
+            // Trigger confetti for #1 rankings
+            setTimeout(() => {
+                createConfetti();
+            }, 1000);
+        });
+
+        // Position Distribution Chart
+        const positionCtx = document.getElementById('positionChart').getContext('2d');
+        new Chart(positionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['דירוג #1-3', 'דירוג #4-10', 'דירוג #11-20', 'דירוג 20+'],
+                datasets: [{
+                    data: [12, 18, 12, 5],
+                    backgroundColor: [
+                        '#FFD700',
+                        '#C0C0C0',
+                        '#CD7F32',
+                        '#E31E24'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    duration: 2000
+                }
+            }
+        });
+
+        // Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'bar',
+            data: {
+                labels: ['כלכלה', 'הייטק', 'נדל״ן', 'קריפטו'],
+                datasets: [{
+                    label: 'דירוג ממוצע',
+                    data: [4.2, 5.8, 6.5, 7.2],
+                    backgroundColor: '#E31E24',
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 2000
+                }
+            }
+        });
+
+        // Monthly Comparison Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: ['יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר'],
+                datasets: [{
+                    label: 'דירוג ממוצע',
+                    data: [10.5, 9.8, 9.2, 8.5, 8.2],
+                    borderColor: '#E31E24',
+                    backgroundColor: 'rgba(227, 30, 36, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'ציון נראות',
+                    data: [58, 62, 65, 70, 73],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#FFFFFF'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 2000
+                }
+            }
+        });
+
+        // Confetti Animation
+        function createConfetti() {
+            const colors = ['#E31E24', '#FFD700', '#4CAF50', '#2196F3'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
